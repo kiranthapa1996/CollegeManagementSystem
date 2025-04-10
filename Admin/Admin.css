@@ -1,0 +1,171 @@
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+table,tr,th,td {
+  padding: 15px 45px;
+  font-size: 20px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+td{
+  padding: 15px 15px;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+  font-weight: 500;
+  color: blue;
+}
+
+.btn {
+  padding: 8px 24px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 14px;
+  margin: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.8;
+}
+
+.btn:active {
+  transform: scale(0.8);
+}
+
+.add {
+  display: inline-block;
+  margin-top: 50px;
+  padding: 15px 45px;
+  background-color: #4caf50;
+}
+
+.btnupdate {
+  background-color: rgb(42, 17, 136);
+}
+
+.btndelete {
+  background-color: #DF2E38;
+}
+
+/* css for update and insert */
+.update h1 {
+  text-align: center;
+  color: #333;
+}
+
+.success{
+  color: #45a049;
+  margin: 0;
+  padding: 0;
+}
+
+form {
+  width: 50%;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+textarea {
+  height: 100px;
+  resize: vertical;
+  resize: none;
+}
+
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.1s linear;
+}
+
+input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.error {
+  font-family: 'Arial', sans-serif;
+  color: #ff0000;
+  font-size: 14px;
+}
+
+/* Dashboard */
+.dashboard .container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.dash-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  background-color: gainsboro;
+  margin: 30px;
+  width: 20vw;
+  height: 20vh;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.dash-box a {
+  background-color: rgb(42, 17, 136);
+  color: white;
+  width: 50%;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.dash-box a:hover {
+  opacity: 0.9;
+}
+
+@media screen and (max-width:900px){
+.dashboard .container {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-box {
+  width: 40vw;
+  margin: 10px;
+}
+}
