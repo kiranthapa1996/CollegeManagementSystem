@@ -17,6 +17,8 @@ if ($con->connect_error) {
 
 $regName = $regEmail = $regPassword = $confirmPassword = $regPhoneNumber = "";
 $regEmailErr = "";
+$regPhoneNumberErr = "";
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
     // Validate and sanitize form inputs
@@ -37,22 +39,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["register"])) {
     }
     $checkEmailStmt->close();
 
-    // If no email error, insert data into database
-    if (empty($regEmailErr)) {
-        $hashedPassword = password_hash($regPassword, PASSWORD_DEFAULT);
-        $insertQuery = "INSERT INTO user_data (name, email, password, phone_number) VALUES (?, ?, ?, ?)";
-        $insertStmt = $con->prepare($insertQuery);
-        $insertStmt->bind_param("ssss", $regName, $regEmail, $hashedPassword, $regPhoneNumber);
-        if ($insertStmt->execute()) {
-            // Registration successful
-            // Set session variables
-            $_SESSION['name'] = $regName;
-            $_SESSION['email'] = $regEmail;
-            $_SESSION['phone_number'] = $regPhoneNumber;
+    $checkPhoneQuery = "SELECT * FROM user_data WHERE phone_number = ?";
+    $checkPhoneStmt = $con->prepare($checkPhoneQuery);
+    $checkPhoneStmt->bind_param("s", $regPhoneNumber);
+    $checkPhoneStmt->execute();
+    $checkPhoneResult = $checkPhoneStmt->get_result();
+    if ($checkPhoneResult->num_rows > 0) {
+    $regPhoneNumberErr = "Phone number already exists for another account";
+    }
+    $checkPhoneStmt->close();
 
+
+    // If no email error, insert data into database
+    if (empty($regEmailErr) && empty($regPhoneNumberErr)) {
+      $hashedPassword = password_hash($regPassword, PASSWORD_DEFAULT);
+      $insertQuery = "INSERT INTO user_data (name, email, password, phone_number) VALUES (?, ?, ?, ?)";
+      $insertStmt = $con->prepare($insertQuery);
+      $insertStmt->bind_param("ssss", $regName, $regEmail, $hashedPassword, $regPhoneNumber);
+      if ($insertStmt->execute()) {
+          // Registration successful
+          // Set session variables
+          $_SESSION['name'] = $regName;
+          $_SESSION['email'] = $regEmail;
+          $_SESSION['phone_number'] = $regPhoneNumber;
             // Redirect to login page
-            header("Location: UserLogin.php");
-            exit();
+            echo "<script>
+        alert('Your account has been registered');
+        window.location.href = 'FacultyLogin.php';
+        </script>";
+        exit();
         } else {
             // Handle database insertion error
             echo "Error: " . $insertStmt->error;
@@ -248,11 +263,12 @@ form {
             }
 
             // Validate Phone Number
-            var phoneFormat = /^98\d{8}$/; // Regex pattern to match phone numbers starting with "98" and having exactly 10 digits
-            if (!(regPhoneNumber.match(phoneFormat))) {
-                document.getElementById("regPhoneNumberErr").innerText = "Please enter a valid phone number starting with '98'";
-                return false;
+            var phoneFormat = /^(97|98)\d{8}$/;
+            if (!regPhoneNumber.match(phoneFormat)) {
+            document.getElementById("regPhoneNumberErr").innerText = "Invalid phone number";
+            return false;
             }
+
 
             return true;
         }
@@ -287,7 +303,7 @@ form {
 
             <label for="regPhoneNumber">Phone Number:</label>
             <input type="text" name="regPhoneNumber" id="regPhoneNumber" value="<?php echo $regPhoneNumber; ?>">
-            <span class="error" id="regPhoneNumberErr"></span>
+            <span class="error" id="regPhoneNumberErr"><?php echo $regPhoneNumberErr; ?></span>
             <br>
 
             <input class="submit-button" type="submit" name="register" value="Register">
